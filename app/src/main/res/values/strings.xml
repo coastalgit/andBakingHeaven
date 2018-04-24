@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">BakingApp</string>
+    <string name="app_name">Baking Heaven</string>
+    <string name="availablenot">Not available</string>
+    <string name="connection">Connection</string>
+    <string name="title_recipestep_list">RecipeSteps</string>
+    <string name="title_recipestep_detail">RecipeStep Detail</string>
 </resources>
