@@ -4,4 +4,8 @@
     <string name="connection">Connection</string>
     <string name="title_recipestep_list">RecipeSteps</string>
     <string name="title_recipestep_detail">RecipeStep Detail</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ingredients">Ingredients</string>
 </resources>

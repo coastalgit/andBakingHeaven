@@ -19,18 +19,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activity.RecipeStepListActivity"
-            android:label="@string/title_recipestep_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".ui.activity.RecipeStepDetailActivity"
-            android:label="@string/title_recipestep_detail"
-            android:parentActivityName=".ui.activity.RecipeStepListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".ui.activity.RecipeActivity"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bf.bakingapp.ui.activity.RecipeStepListActivity" />
+                android:value="com.bf.bakingapp.ui.activity.MainActivity" />
+        </activity>
+        <activity android:name=".ui.activity.IngredientsActivity"
+            android:launchMode="singleTask">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bf.bakingapp.ui.activity.RecipeActivity" />
         </activity>
     </application>
 

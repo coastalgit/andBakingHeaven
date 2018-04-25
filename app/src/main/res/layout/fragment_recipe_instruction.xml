@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.bf.bakingapp.ui.fragments.RecipeInstructionFragment">
+
+    <LinearLayout
+        android:id="@+id/layout_instruct_exowrapper"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@color/colorAccent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_instruction_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="VIDEO" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_instruct_fulldescwrapper"
+        android:layout_below="@+id/layout_instruct_exowrapper"
+        android:layout_above="@+id/layout_instruct_navcontrolswrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_instruction_fulldesc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="FULL DESC" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_instruct_navcontrolswrapper"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/colorWhite"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_instruct_navback"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_chevron_left" />
+
+        <ImageButton
+            android:id="@+id/btn_instruct_navforward"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_chevron_right" />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

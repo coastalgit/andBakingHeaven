@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bf.bakingapp.ui.activity.RecipeActivity">
+
+    <FrameLayout
+        android:id="@+id/layout_main_steps"
+        android:layout_width="350dp"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_main_instructions"
+        android:layout_toRightOf="@+id/layout_main_steps"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <!--<fragment-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:id="@+id/fragment_recipesteps"-->
+        <!--android:name="com.bf.bakingapp.ui.fragments.RecipeStepsFragment"-->
+        <!--android:layout_width="350dp"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <!--<fragment-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:id="@+id/fragment_recipeinstruction"-->
+        <!--android:layout_toRightOf="@+id/fragment_recipesteps"-->
+        <!--android:name="com.bf.bakingapp.ui.fragments.RecipeStepsFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+
+</RelativeLayout>

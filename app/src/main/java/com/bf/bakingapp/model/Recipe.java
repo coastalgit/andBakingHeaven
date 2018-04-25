@@ -5,11 +5,12 @@ package com.bf.bakingapp.model;
  * Created on 22/04/2018
  */
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Recipe {
+public class Recipe implements Serializable{
 
     @SerializedName("id")
     @Expose

@@ -2,6 +2,8 @@ package com.bf.bakingapp.ui.activity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +30,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.bf.bakingapp.common.Constants.Fonts.FONT_INDIEFLOWER;
+
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.RecipeAdapterOnClickHandler {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -50,30 +54,30 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
         ButterKnife.bind(this);
 
+        mNetworkUtils = new NetworkUtils();
+
         mRecipeAdapter = new RecipeAdapter(this, this);
         mRecyclerViewRecipes.setAdapter(mRecipeAdapter);
         mRecyclerViewRecipes.setHasFixedSize(true);
         boolean isTablet = getResources().getBoolean(R.bool.is_landscape);
         applyLayoutManager(isTablet);
 
+        attachViewModel();
+
+        if (!mNetworkUtils.isConnected(this)) {
+            String errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) +")";
+            displayErrorMessage(true, errorStr);
+        }
+    }
+
+    private void attachViewModel() {
         mRecipesViewModel = ViewModelProviders.of(this).get(ViewModelMain.class);
-
-        //if (usersViewModel == null)
-
-
-
-//        if (usersViewModel.getRecipesObservable(). == null){
-//            reloadRecipeAdapter(usersViewModel.getRecipes());
-//        }
-//        else{
-//            usersViewModel.getRecipesFromServer();
-//        }
-
         subscribe();
     }
 
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume: ");
         super.onResume();
     }
 
@@ -84,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                 reloadRecipeAdapter(recipes);
             }
         });
-
     }
 
     private void applyLayoutManager(boolean asGrid) {
@@ -94,32 +97,30 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         } else {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mRecyclerViewRecipes.setLayoutManager(linearLayoutManager);
-
-            // TODO: 24/04/2018 Divider
-//            DividerItemDecoration divider = new DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL);
-//            divider.setDrawable(getResources().getDrawable(R.drawable.divider_line));
-//            mRecyclerViewRecipes.addItemDecoration(divider);
         }
+        // TODO: 24/04/2018 Divider
+        DividerItemDecoration divider = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+        divider.setDrawable(getResources().getDrawable(R.drawable.divider_line));
+        mRecyclerViewRecipes.addItemDecoration(divider);
     }
 
     private void reloadRecipeAdapter(final ArrayList<Recipe> recipes){
-        if (mNetworkUtils == null)
-            mNetworkUtils = new NetworkUtils();
 
-        if (mNetworkUtils.isConnected(this)) {
+//        if (mNetworkUtils.isConnected(this)) {
             if (recipes != null) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        displayErrorMessage(false,"");
                         mRecipeAdapter.reloadAdapter(recipes);
                     }
                 });
             }
-        }
-        else{
-            String errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) +")";
-            displayErrorMessage(true, errorStr);
-        }
+//        }
+//        else{
+//            String errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) +")";
+//            displayErrorMessage(true, errorStr);
+//        }
     }
 
     private void displayErrorMessage(boolean show, String msg){
@@ -128,17 +129,23 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         mMainLabel.setText(msg);
     }
 
+    private void loadRecipeDetails(Recipe recipe){
+        Intent recipeIntent = new Intent(this, RecipeActivity.class);
+        //detailIntent.putExtra(Details2Activity.KEY_MOVIE, movieSelected);
+        recipeIntent.putExtra(RecipeActivity.KEY_RECIPE, recipe);
+        startActivity(recipeIntent);
+    }
+
     @OnClick(R.id.btn_retry)
     public void btnRetry_onClick(Button btn){
+        subscribe();
         mRecipesViewModel.getRecipesFromServer();
     }
 
     @Override
     public void onClick(Recipe recipe) {
         Log.d(TAG, "onClick: Recipe:["+recipe.getId()+"]");
-
-            //loadRecipeDetails();
+        loadRecipeDetails(recipe);
     }
-
 
 }
