@@ -6,6 +6,7 @@ package com.bf.bakingapp.adapter;
  */
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,11 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.RecipesAdapt
     private final Context mContext;
     private ArrayList<Step> mSteps;
     StepsAdapterOnClickHandler mListener;
+    int mSelectedPosition = 0;
+
+    public int getSelectedPosition() {
+        return mSelectedPosition;
+    }
 
     public interface StepsAdapterOnClickHandler {
         void onClick(Step step);
@@ -59,6 +65,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.RecipesAdapt
     public void onBindViewHolder(@NonNull RecipesAdapterViewHolder holder, int position) {
         Step step = mSteps.get(position);
         holder.recipeDescShort.setText(step.getShortDescription());
+        holder.recipeDescShort.setBackgroundColor(position==mSelectedPosition? Color.YELLOW:Color.WHITE);
     }
 
     @Override
@@ -85,6 +92,14 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.RecipesAdapt
                 @Override
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
+
+                    if (pos == RecyclerView.NO_POSITION)
+                        return;
+
+                    notifyItemChanged(mSelectedPosition);
+                    mSelectedPosition = pos;
+                    notifyItemChanged(mSelectedPosition);
+
                     Step step = mSteps.get(pos);
                     mListener.onClick(step);
                 }

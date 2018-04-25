@@ -134,6 +134,13 @@ public class RecipeInstructionFragment extends Fragment{
             Log.d(TAG, "updateInstruction: select["+step.getShortDescription()+"] at pos["+String.valueOf(step.getId())+"]");
             mTvInstructionTitle.setText(step.getVideoURL());
             mTvInstructionFullDesc.setText(step.getDescription());
+
+            int stepCountInRecipe = mRecipe.getSteps().size();
+            int stepIdToDisplay = step.getId();
+            Log.d(TAG, "updateInstruction: recipe count="+String.valueOf(stepCountInRecipe)+" step id="+String.valueOf(stepIdToDisplay)+")");
+            mBtnNav_Back.setVisibility(stepIdToDisplay==0?View.INVISIBLE:View.VISIBLE);
+            mBtnNav_Forward.setVisibility(stepIdToDisplay==(stepCountInRecipe-1)?View.INVISIBLE:View.VISIBLE);
+
         }
     }
 

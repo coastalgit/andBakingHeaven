@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
+    android:background="@color/colorWhite"
     tools:context="com.bf.bakingapp.ui.fragments.RecipeStepsFragment">
 
     <LinearLayout
@@ -19,18 +19,21 @@
             android:text="INGREDIENTS"/>
     </LinearLayout>
 
+<!--
     <TextView
         android:id="@+id/tv_steps_title"
         android:layout_below="@+id/layout_steps_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="STEPS" />
+-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_steps"
-        android:layout_below="@+id/tv_steps_title"
+        android:layout_below="@+id/layout_steps_header"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
         android:clipToPadding="false"
         android:orientation="vertical" />
 

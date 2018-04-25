@@ -86,7 +86,7 @@ public class RecipeActivity extends AppCompatActivity implements
                 mFragmentInstructions = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_INSTRUCTION);
         }
 
-
+// TODO: 26/04/2018 save psotion, and update instruction view (including hiding of relevant back/fwd arrows
 
         //buildView();
 
@@ -171,12 +171,19 @@ public class RecipeActivity extends AppCompatActivity implements
 
     @Override
     public void onFragmentStepNav_Back() {
-        Log.d(TAG, "onFragmentStepNav_Back: ");
+        int current_pos = ((RecipeStepsFragment)mFragmentSteps).getStepsAdapter().getSelectedPosition();
+        Log.d(TAG, "onFragmentStepNav_Back: current pos:"+String.valueOf(current_pos));
+        if (current_pos > 0)
+            ((RecipeStepsFragment)mFragmentSteps).highlightActiveStep(current_pos-1);
     }
 
     @Override
     public void onFragmentStepNav_Forward() {
-        Log.d(TAG, "onFragmentStepNav_Forward: ");
+        int current_pos = ((RecipeStepsFragment)mFragmentSteps).getStepsAdapter().getSelectedPosition();
+        Log.d(TAG, "onFragmentStepNav_Forward: current pos:"+String.valueOf(current_pos));
+        if (current_pos < mViewModel.getRecipe().getSteps().size())
+            ((RecipeStepsFragment)mFragmentSteps).highlightActiveStep(current_pos+1);
+
     }
 
     @Override

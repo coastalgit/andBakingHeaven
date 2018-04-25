@@ -36,13 +36,18 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
     }
 
     private Recipe mRecipe;
+
+    public StepsAdapter getStepsAdapter() {
+        return mStepsAdapter;
+    }
+
     private StepsAdapter mStepsAdapter;
 
     @BindView(R.id.recyclerview_steps)
     RecyclerView mRecyclerViewSteps;
 
-    @BindView(R.id.tv_steps_title)
-    TextView mTvStepsTitle;
+//    @BindView(R.id.tv_steps_title)
+//    TextView mTvStepsTitle;
 
     @BindView(R.id.btn_steps_showingredients)
     Button mBtnShowIngredients;
@@ -120,9 +125,13 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
         super.onDestroy();
     }
 
+    public void highlightActiveStep(int pos){
+        mRecyclerViewSteps.findViewHolderForAdapterPosition(pos).itemView.performClick();
+    }
+
     private void buildView(){
         if (mRecipe != null){
-            mTvStepsTitle.setText(mRecipe.getName());
+            //mTvStepsTitle.setText(mRecipe.getName());
             return;
         }
         Log.d(TAG, "buildView: Recipe is NULL");
