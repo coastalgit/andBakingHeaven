@@ -30,6 +30,7 @@
                     android:layout_height="match_parent"
                     android:text="VIDEO" />
 
+
             </LinearLayout>
 
     <ScrollView
@@ -50,6 +51,13 @@
                     android:id="@+id/tv_instruction_fulldesc"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:maxLines="30"
+                    android:textSize="11sp"
+                    android:gravity="center"
                     android:text="FULL DESC" />
             </LinearLayout>
      </ScrollView>

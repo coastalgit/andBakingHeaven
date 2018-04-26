@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,16 @@ import static com.bf.bakingapp.common.Constants.Fonts.FONT_TITILLIUM_REGULAR;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.RecipesAdapterViewHolder> {
 
+    private static final String TAG = StepsAdapter.class.getSimpleName();
+
     private final Context mContext;
     private ArrayList<Step> mSteps;
     StepsAdapterOnClickHandler mListener;
+
+    public void setSelectedPosition(int mSelectedPosition) {
+        this.mSelectedPosition = mSelectedPosition;
+    }
+
     int mSelectedPosition = 0;
 
     public int getSelectedPosition() {
@@ -63,9 +71,13 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.RecipesAdapt
 
     @Override
     public void onBindViewHolder(@NonNull RecipesAdapterViewHolder holder, int position) {
+        Log.d(TAG, "onBindViewHolder: pos="+String.valueOf(position) + " selectedpos="+String.valueOf(mSelectedPosition));
         Step step = mSteps.get(position);
+
         holder.recipeDescShort.setText(step.getShortDescription());
-        holder.recipeDescShort.setBackgroundColor(position==mSelectedPosition? Color.YELLOW:Color.WHITE);
+        holder.recipeDescShort.setTextColor(position==mSelectedPosition? Color.WHITE:mContext.getResources().getColor(R.color.colorPrimary));
+
+        holder.recipeDescShort.setBackgroundColor(position==mSelectedPosition? mContext.getResources().getColor(R.color.colorPrimary):Color.WHITE);
     }
 
     @Override

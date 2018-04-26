@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.bf.bakingapp.adapter.StepsAdapter;
 import com.bf.bakingapp.model.Recipe;
 import com.bf.bakingapp.model.Step;
 import com.bf.bakingapp.ui.activity.IngredientsActivity;
+import com.bf.bakingapp.ui.activity.RecipeActivity;
 
 import java.util.ArrayList;
 
@@ -36,12 +38,12 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
     }
 
     private Recipe mRecipe;
-
     public StepsAdapter getStepsAdapter() {
         return mStepsAdapter;
     }
-
     private StepsAdapter mStepsAdapter;
+    private boolean mIsLandscape = false;
+    private boolean mIsTwoPane = false;
 
     @BindView(R.id.recyclerview_steps)
     RecyclerView mRecyclerViewSteps;
@@ -86,6 +88,9 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
         View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
         ButterKnife.bind(this, rootView);
 
+        mIsTwoPane = getResources().getBoolean(R.bool.is_tabletsize);
+        mIsLandscape = getResources().getBoolean(R.bool.is_landscape);
+
         readBundle(getArguments());
 
         if (savedInstanceState == null) {
@@ -103,8 +108,10 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
 
         mStepsAdapter.reloadAdapter(new ArrayList<Step>(mRecipe.getSteps()));
 
-        buildView();
-
+        Log.d(TAG, "onCreateView: active step="+String.valueOf(((RecipeActivity)getActivity()).getViewModel().getStepActive().getId()));
+        Step activeStep  = ((RecipeActivity)getActivity()).getViewModel().getStepActive();
+        if (activeStep != null)
+            highlightActiveStep(((RecipeActivity)getActivity()).getViewModel().getStepActive().getId());
         return rootView;
     }
 
@@ -126,15 +133,20 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
     }
 
     public void highlightActiveStep(int pos){
-        mRecyclerViewSteps.findViewHolderForAdapterPosition(pos).itemView.performClick();
-    }
+        Log.d(TAG, "highlightActiveStep: pos="+String.valueOf(pos));
+        if (mRecyclerViewSteps.findViewHolderForAdapterPosition(pos) != null)
+            mRecyclerViewSteps.findViewHolderForAdapterPosition(pos).itemView.performClick();
+        mStepsAdapter.setSelectedPosition(pos);
+        //mRecyclerViewSteps.scrollToPosition(pos);
+        //mRecyclerViewSteps.smoothScrollToPosition(pos);
+        //mRecyclerViewSteps.getLayoutManager().smoothScrollToPosition(mRecyclerViewSteps, null, pos);
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mRecyclerViewSteps.getLayoutManager().scrollToPosition(pos);
+//            }
+//        });
 
-    private void buildView(){
-        if (mRecipe != null){
-            //mTvStepsTitle.setText(mRecipe.getName());
-            return;
-        }
-        Log.d(TAG, "buildView: Recipe is NULL");
     }
 
     @Override

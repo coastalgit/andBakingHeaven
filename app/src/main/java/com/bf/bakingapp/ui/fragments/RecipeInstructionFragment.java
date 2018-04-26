@@ -16,6 +16,7 @@ import com.bf.bakingapp.R;
 import com.bf.bakingapp.adapter.StepsAdapter;
 import com.bf.bakingapp.model.Recipe;
 import com.bf.bakingapp.model.Step;
+import com.bf.bakingapp.ui.activity.RecipeActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,7 +89,8 @@ public class RecipeInstructionFragment extends Fragment{
         }
 
         buildView();
-
+        Log.d(TAG, "onCreateView: active step="+String.valueOf(((RecipeActivity)getActivity()).getViewModel().getStepActive().getId()));
+        updateInstruction(((RecipeActivity)getActivity()).getViewModel().getStepActive());
         return rootView;
     }
 

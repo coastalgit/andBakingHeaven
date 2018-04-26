@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/layout_instruct_exowrapper"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="230dp"
         android:background="@color/colorAccent"
         android:orientation="vertical">
 
@@ -33,6 +33,13 @@
             android:id="@+id/tv_instruction_fulldesc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="15dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:maxLines="30"
+            android:textSize="11sp"
+            android:gravity="center"
             android:text="FULL DESC" />
     </LinearLayout>
 
@@ -40,7 +47,7 @@
         android:id="@+id/layout_instruct_navcontrolswrapper"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:background="@color/colorWhite"
         android:orientation="horizontal">
 
