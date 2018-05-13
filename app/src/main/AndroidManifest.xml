@@ -36,8 +36,9 @@
         </activity>
 
         <service
-            android:name=".GridWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
+            android:name=".widget.BakingStepsWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
 
         <receiver android:name=".widget.BakingWidgetProvider">
             <intent-filter>
@@ -48,6 +49,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/baking_widget_provider_info" />
         </receiver>
+
     </application>
 
 </manifest>

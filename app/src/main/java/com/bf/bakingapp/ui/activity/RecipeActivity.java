@@ -194,6 +194,8 @@ public class RecipeActivity extends AppCompatActivity implements
 //        }
     }
 
+
+
     private void populatePreliminaryFields(Recipe recipe){
 //        mTvRecipeStepTitle.setText(recipe.getName());
 //        if (mTvRecipeInstructionTitle != null)

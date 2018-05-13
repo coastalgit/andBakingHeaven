@@ -20,9 +20,11 @@ import android.widget.TextView;
 
 import com.bf.bakingapp.R;
 import com.bf.bakingapp.adapter.RecipeAdapter;
+import com.bf.bakingapp.manager.IngredientsManager;
 import com.bf.bakingapp.model.Recipe;
 import com.bf.bakingapp.utility.NetworkUtils;
 import com.bf.bakingapp.viewmodel.ViewModelMain;
+import com.bf.bakingapp.widget.BakingWidgetProvider;
 
 import java.util.ArrayList;
 
@@ -136,6 +138,17 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         startActivity(recipeIntent);
     }
 
+    private void updateWidgetStorageWithIngredients(Recipe recipe){
+        IngredientsManager.getInstance().setIngredients(recipe.getIngredients());
+        // TODO: 01/05/2018 Save to disk with (app) context
+    }
+
+    private void updateWidgetWithBroadcast(){
+        Intent intent = new Intent(this, BakingWidgetProvider.class);
+        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+        sendBroadcast(intent);
+    }
+
     @OnClick(R.id.btn_retry)
     public void btnRetry_onClick(Button btn){
         subscribe();
@@ -145,6 +158,8 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     @Override
     public void onClick(Recipe recipe) {
         Log.d(TAG, "onClick: Recipe:["+recipe.getId()+"]");
+        updateWidgetStorageWithIngredients(recipe);
+        updateWidgetWithBroadcast();
         loadRecipeDetails(recipe);
     }
 
