@@ -1,24 +1,18 @@
 package com.bf.bakingapp.widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.ListView;
 import android.widget.RemoteViews;
 
 import com.bf.bakingapp.R;
-import com.bf.bakingapp.ui.activity.MainActivity;
+import com.bf.bakingapp.manager.RecipeManager;
 
-/**
- * Implementation of App Widget functionality.
- */
 public class BakingWidgetProvider extends AppWidgetProvider {
 
-    private static final String TAG = BakingWidgetProvider.class.getSimpleName();
+    //private static final String TAG = BakingWidgetProvider.class.getSimpleName();
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
 
@@ -26,20 +20,24 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, BakingStepsWidgetService.class);
         views.setRemoteAdapter(R.id.lv_widget, intent);
 
+        if (RecipeManager.getInstance().getRecipe() != null)
+            views.setTextViewText(R.id.tv_widget_title, RecipeManager.getInstance().getRecipe().getName());
+
         appWidgetManager.updateAppWidget(appWidgetId, views);
    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive: ");
+        super.onReceive(context, intent);
 
         final String action = intent.getAction();
         if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            ComponentName componentName = new ComponentName(context, BakingWidgetProvider.class);
-            widgetManager.notifyAppWidgetViewDataChanged(widgetManager.getAppWidgetIds(componentName), R.id.lv_widget);
+            ComponentName appWidget = new ComponentName(context, BakingWidgetProvider.class);
+            int[] appWidgetIds = widgetManager.getAppWidgetIds(appWidget);
+            onUpdate(context, widgetManager, appWidgetIds);
+            widgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.lv_widget);
         }
-        super.onReceive(context, intent);
     }
 
     @Override
@@ -51,13 +49,12 @@ public class BakingWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
-        // TODO: 01/05/2018 Check for data in IngredientsManager
+        //
     }
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
+        //
     }
 }
 

@@ -3,7 +3,6 @@ package com.bf.bakingapp.ui.activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,25 +13,21 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bf.bakingapp.R;
 import com.bf.bakingapp.adapter.RecipeAdapter;
-import com.bf.bakingapp.manager.IngredientsManager;
+import com.bf.bakingapp.manager.RecipeManager;
 import com.bf.bakingapp.model.Recipe;
 import com.bf.bakingapp.utility.NetworkUtils;
 import com.bf.bakingapp.viewmodel.ViewModelMain;
-import com.bf.bakingapp.widget.BakingWidgetProvider;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.bf.bakingapp.common.Constants.Fonts.FONT_INDIEFLOWER;
 
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.RecipeAdapterOnClickHandler {
 
@@ -133,17 +128,14 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
     private void loadRecipeDetails(Recipe recipe){
         Intent recipeIntent = new Intent(this, RecipeActivity.class);
-        //detailIntent.putExtra(Details2Activity.KEY_MOVIE, movieSelected);
         recipeIntent.putExtra(RecipeActivity.KEY_RECIPE, recipe);
         startActivity(recipeIntent);
     }
 
     private void updateWidgetStorageWithIngredients(Recipe recipe){
-        IngredientsManager.getInstance().setIngredients(recipe.getIngredients());
+        RecipeManager.getInstance().setRecipe(recipe);
         // TODO: 01/05/2018 Save to disk with (app) context
     }
-
-
 
     @OnClick(R.id.btn_retry)
     public void btnRetry_onClick(Button btn){
@@ -155,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     public void onClick(Recipe recipe) {
         Log.d(TAG, "onClick: Recipe:["+recipe.getId()+"]");
         updateWidgetStorageWithIngredients(recipe);
-
         loadRecipeDetails(recipe);
     }
 
