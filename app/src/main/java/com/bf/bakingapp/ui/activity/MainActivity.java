@@ -143,11 +143,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         // TODO: 01/05/2018 Save to disk with (app) context
     }
 
-    private void updateWidgetWithBroadcast(){
-        Intent intent = new Intent(this, BakingWidgetProvider.class);
-        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
-        sendBroadcast(intent);
-    }
+
 
     @OnClick(R.id.btn_retry)
     public void btnRetry_onClick(Button btn){
@@ -159,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     public void onClick(Recipe recipe) {
         Log.d(TAG, "onClick: Recipe:["+recipe.getId()+"]");
         updateWidgetStorageWithIngredients(recipe);
-        updateWidgetWithBroadcast();
+
         loadRecipeDetails(recipe);
     }
 

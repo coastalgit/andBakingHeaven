@@ -64,7 +64,6 @@ public class IngredientsActivity extends AppCompatActivity {
     protected void onStop() {
         Log.d(TAG, "onStop: ");
         super.onStop();
-        //finish();
     }
 
     @Override

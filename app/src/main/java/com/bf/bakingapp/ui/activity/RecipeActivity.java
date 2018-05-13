@@ -1,6 +1,7 @@
 package com.bf.bakingapp.ui.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,7 @@ import com.bf.bakingapp.model.Step;
 import com.bf.bakingapp.ui.fragments.RecipeInstructionFragment;
 import com.bf.bakingapp.ui.fragments.RecipeStepsFragment;
 import com.bf.bakingapp.viewmodel.ViewModelRecipe;
+import com.bf.bakingapp.widget.BakingWidgetProvider;
 
 public class RecipeActivity extends AppCompatActivity implements
         RecipeStepsFragment.OnStepsFragmentInteractionListener,
@@ -90,6 +92,8 @@ public class RecipeActivity extends AppCompatActivity implements
                 //Step step = mViewModel.getRecipe().getSteps().get(0);
                 //((RecipeInstructionFragment)mFragmentInstructions).updateInstruction(step);
             }
+
+            updateWidgetWithBroadcast();
         }
         else{
             Log.d(TAG, "onCreate: HAVE INSTANCE");
@@ -114,6 +118,8 @@ public class RecipeActivity extends AppCompatActivity implements
                 onStepClick(mViewModel.getRecipe().getSteps().get(0)); // default selection
 
             populatePreliminaryFields(mViewModel.getRecipe());
+            
+            
         } else {
             // TODO: 25/04/2018 Display error
         }
@@ -183,6 +189,13 @@ public class RecipeActivity extends AppCompatActivity implements
         super.onDestroy();
     }
 
+    private void updateWidgetWithBroadcast(){
+        Log.d(TAG, "updateWidgetWithBroadcast: ");
+        Intent intent = new Intent(this, BakingWidgetProvider.class);
+        intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+        sendBroadcast(intent);
+    }
+    
     private void buildView(){
         //determine layout for device
 //        mIsTwoPane = getResources().getBoolean(R.bool.is_tabletsize);
