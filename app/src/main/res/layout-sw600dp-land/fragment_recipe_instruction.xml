@@ -27,8 +27,32 @@
                 <TextView
                     android:id="@+id/tv_instruction_title"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="VIDEO" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                        android:id="@+id/exoPlayerView"
+                        android:paddingLeft="100dp"
+                        android:paddingRight="100dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:keepScreenOn="true" />
+
+                    <TextView
+                        android:id="@+id/tv_message_novideo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:visibility="invisible"
+                        android:text="Video not available" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 

@@ -7,6 +7,8 @@ package com.bf.bakingapp.common;
 
 public class Constants {
 
+    public final static String APP_NAME = "bakingapp";
+
     public class Fonts {
         public static final String FONT_TITILLIUM_REGULAR = "TitilliumWeb-Regular.ttf";
         public static final String FONT_INDIEFLOWER = "IndieFlower.ttf";

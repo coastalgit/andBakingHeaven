@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.bf.bakingapp.R;
 import com.bf.bakingapp.adapter.StepsAdapter;
@@ -38,9 +37,9 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
     }
 
     private Recipe mRecipe;
-    public StepsAdapter getStepsAdapter() {
-        return mStepsAdapter;
-    }
+//    public StepsAdapter getStepsAdapter() {
+//        return mStepsAdapter;
+//    }
     private StepsAdapter mStepsAdapter;
     private boolean mIsLandscape = false;
     private boolean mIsTwoPane = false;

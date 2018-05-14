@@ -3,7 +3,9 @@ package com.bf.bakingapp.ui.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +16,32 @@ import android.widget.TextView;
 
 import com.bf.bakingapp.R;
 import com.bf.bakingapp.adapter.StepsAdapter;
+import com.bf.bakingapp.common.Constants;
 import com.bf.bakingapp.model.Recipe;
 import com.bf.bakingapp.model.Step;
 import com.bf.bakingapp.ui.activity.RecipeActivity;
+
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.RenderersFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,10 +60,20 @@ public class RecipeInstructionFragment extends Fragment{
 
     private Recipe mRecipe;
 
+    private SimpleExoPlayer mExoPlayer;
+    private SimpleExoPlayerView mExoPlayerView;
+    private long mPlaybackPosition;
+
+//    @Nullable
+//    @BindView(R.id.exoPlayerView)
+//    SimpleExoPlayerView mExoPlayerView;
+
     @BindView(R.id.tv_instruction_title)
     TextView mTvInstructionTitle;
     @BindView(R.id.tv_instruction_fulldesc)
     TextView mTvInstructionFullDesc;
+    @BindView(R.id.tv_message_novideo)
+    TextView mTvMessageNoVideo;
 
     @BindView(R.id.btn_instruct_navback)
     ImageButton mBtnNav_Back;
@@ -88,27 +123,67 @@ public class RecipeInstructionFragment extends Fragment{
             Log.d(TAG, "onCreateView: HAVE INSTANCE");
         }
 
+        mExoPlayerView = rootView.findViewById(R.id.exoPlayerView);
+
+        releasePlayer();
         buildView();
+
         Log.d(TAG, "onCreateView: active step="+String.valueOf(((RecipeActivity)getActivity()).getViewModel().getStepActive().getId()));
         updateInstruction(((RecipeActivity)getActivity()).getViewModel().getStepActive());
+
         return rootView;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        Log.d(TAG, "onResume: ");
-        super.onResume();
     }
 
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy: ");
         super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23){
+            // TODO: 14/05/2018 set player
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23){
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Util.SDK_INT <= 23 || mExoPlayer == null) {
+            // TODO: 14/05/2018 set player
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        //if (mExoPlayer != null && mExoPlayer.getContentPosition() != 0)
+        if (mExoPlayer != null)
+            mPlaybackPosition = mExoPlayer.getCurrentPosition();
+
+        if (Util.SDK_INT <= 23)
+            releasePlayer();
+
     }
 
     private void buildView(){
@@ -134,7 +209,7 @@ public class RecipeInstructionFragment extends Fragment{
         if (step != null){
             //Step step = mRecipe.getSteps().get(stepId);
             Log.d(TAG, "updateInstruction: select["+step.getShortDescription()+"] at pos["+String.valueOf(step.getId())+"]");
-            mTvInstructionTitle.setText(step.getVideoURL());
+
             mTvInstructionFullDesc.setText(step.getDescription());
 
             int stepCountInRecipe = mRecipe.getSteps().size();
@@ -143,6 +218,90 @@ public class RecipeInstructionFragment extends Fragment{
             mBtnNav_Back.setVisibility(stepIdToDisplay==0?View.INVISIBLE:View.VISIBLE);
             mBtnNav_Forward.setVisibility(stepIdToDisplay==(stepCountInRecipe-1)?View.INVISIBLE:View.VISIBLE);
 
+            setVideoDisplay(step.getVideoURL());
+        }
+    }
+
+    private void initializeExoPlayer(String videoUrl){
+        if (mExoPlayer == null && !(TextUtils.isEmpty(videoUrl))){
+
+            DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter(); // bandwidth during playback
+            RenderersFactory renderersFactory = new DefaultRenderersFactory(getContext());
+            TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+            LoadControl loadControl = new DefaultLoadControl();
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, loadControl);
+            mExoPlayerView.setPlayer(mExoPlayer);
+
+            String userAgent = Util.getUserAgent(getContext(), Constants.APP_NAME);
+            Uri videoUri = Uri.parse(videoUrl);
+
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent, bandwidthMeter);
+            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(videoUri);
+            mExoPlayer.prepare(mediaSource);
+
+            //mExoPlayer.seekTo(mPlaybackPosition);
+            mExoPlayer.setPlayWhenReady(true);
+        }
+    }
+
+    private void setVideoDisplay(String videoUrl){
+        if (TextUtils.isEmpty(videoUrl)){
+            // TODO: 14/05/2018 Display alternative image
+            mTvInstructionTitle.setText("NO VIDEO");
+            mTvMessageNoVideo.setVisibility(View.VISIBLE);
+            // TODO: 14/05/2018 Set text string
+            mExoPlayerView.setVisibility(View.GONE);
+        }
+        else{
+            // TODO: 14/05/2018 Hide alternative image
+            mTvInstructionTitle.setText(videoUrl);
+            mTvMessageNoVideo.setVisibility(View.INVISIBLE);
+            mExoPlayerView.setVisibility(View.VISIBLE);
+
+            initializeExoPlayer(videoUrl);
+
+//            Picasso.with(getContext())
+//                    .load(steps.get(step).getThumbnailURL())
+//                    .networkPolicy(NetworkPolicy.OFFLINE)
+//                    .into(placeHolderOnMovieError, new Callback() {
+//                        @Override
+//                        public void onSuccess() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onError() {
+//                            //Try again online if cache failed
+//                            Picasso.with(getContext())
+//                                    .load(steps.get(step).getThumbnailURL())
+//                                    .error(R.drawable.ic_pastry_cake)
+//                                    .into(placeHolderOnMovieError, new Callback() {
+//                                        @Override
+//                                        public void onSuccess() {
+//
+//                                        }
+//
+//                                        @Override
+//                                        public void onError() {
+//                                            Log.v("Picasso", "Could not fetch image");
+//                                        }
+//                                    });
+//                        }
+//                    });
+//
+//        } else {
+//            placeHolderOnMovieError.setImageResource(R.drawable.ic_pastry_cake);
+        }
+
+
+    }
+
+    private void releasePlayer() {
+        if (mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
         }
     }
 
@@ -158,20 +317,21 @@ public class RecipeInstructionFragment extends Fragment{
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     @OnClick(R.id.btn_instruct_navback)
     public void btnNavBack_onClick(ImageButton btn){
+        if (mExoPlayer != null)
+            mExoPlayer.stop();
+
         if (mListener != null)
             mListener.onFragmentStepNav_Back();
     }
 
     @OnClick(R.id.btn_instruct_navforward)
     public void btnNavForward_onClick(ImageButton btn){
+        if (mExoPlayer != null)
+            mExoPlayer.stop();
+
         if (mListener != null)
             mListener.onFragmentStepNav_Forward();
     }
