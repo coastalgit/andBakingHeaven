@@ -99,9 +99,9 @@ public class RecipeActivity extends AppCompatActivity implements
             Log.d(TAG, "onCreate: HAVE INSTANCE");
 
             mFragmentSteps = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_STEPS);
-            if (mIsTwoPane) {
+            //if (mIsTwoPane) {
                 mFragmentInstructions = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_INSTRUCTION);
-            }
+            //}
             //((RecipeStepsFragment)mFragmentSteps).highlightActiveStep(mViewModel.getStepActive().getId());
             //onStepClick(mViewModel.getStepActive());
         }
@@ -146,11 +146,16 @@ public class RecipeActivity extends AppCompatActivity implements
         Log.d(TAG, "onSaveInstanceState: ");
         super.onSaveInstanceState(outState);
 
-        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_STEPS_TAG) != null)
-            getSupportFragmentManager().putFragment(outState, FRAGMENT_STEPS, mFragmentSteps);
+        try {
+            if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_STEPS_TAG) != null)
+                getSupportFragmentManager().putFragment(outState, FRAGMENT_STEPS, mFragmentSteps);
 
-        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_INSTRUCTION_TAG) != null)
-            getSupportFragmentManager().putFragment(outState, FRAGMENT_INSTRUCTION, mFragmentInstructions);
+            if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_INSTRUCTION_TAG) != null)
+                getSupportFragmentManager().putFragment(outState, FRAGMENT_INSTRUCTION, mFragmentInstructions);
+        }
+        catch (Exception exc){
+            Log.e(TAG, "onSaveInstanceState: EXCEPTION:["+exc.getLocalizedMessage()+"]" );
+        }
     }
 
     @Override

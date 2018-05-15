@@ -3,6 +3,7 @@ package com.bf.bakingapp.ui.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -52,6 +53,7 @@ public class RecipeInstructionFragment extends Fragment{
 
     private static final String TAG = RecipeInstructionFragment.class.getSimpleName();
     private final static String KEY_RECIPE = "key_recipe";
+    private final static String KEY_PLAYBACKPOSITION = "key_playpos";
 
     public interface OnInstructionFragmentInteractionListener {
         void onFragmentStepNav_Back();
@@ -59,6 +61,7 @@ public class RecipeInstructionFragment extends Fragment{
     }
 
     private Recipe mRecipe;
+    private Step mStepActive;
 
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mExoPlayerView;
@@ -81,6 +84,16 @@ public class RecipeInstructionFragment extends Fragment{
     ImageButton mBtnNav_Forward;
 
     private OnInstructionFragmentInteractionListener mListener;
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: ");
+        super.onSaveInstanceState(outState);
+
+        //if (mPlaybackPosition != 0)
+
+            outState.putLong(KEY_PLAYBACKPOSITION, mPlaybackPosition);
+    }
 
     public RecipeInstructionFragment() {
         // Required empty public constructor
@@ -111,6 +124,8 @@ public class RecipeInstructionFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: (Instruction)");
+        setRetainInstance(true);
+
         View rootView = inflater.inflate(R.layout.fragment_recipe_instruction, container, false);
         ButterKnife.bind(this, rootView);
 
@@ -120,7 +135,8 @@ public class RecipeInstructionFragment extends Fragment{
             Log.d(TAG, "onCreateView: NO  INSTANCE");
         }
         else{
-            Log.d(TAG, "onCreateView: HAVE INSTANCE");
+            Log.d(TAG, "onCreateView: HAVE INSTANCE. Restored Playback pos:"+String.valueOf(mPlaybackPosition));
+            setPlaybackPosition(savedInstanceState.getLong(KEY_PLAYBACKPOSITION, 0));
         }
 
         mExoPlayerView = rootView.findViewById(R.id.exoPlayerView);
@@ -128,8 +144,8 @@ public class RecipeInstructionFragment extends Fragment{
         releasePlayer();
         buildView();
 
-        Log.d(TAG, "onCreateView: active step="+String.valueOf(((RecipeActivity)getActivity()).getViewModel().getStepActive().getId()));
-        updateInstruction(((RecipeActivity)getActivity()).getViewModel().getStepActive());
+        //Log.d(TAG, "onCreateView: active step="+String.valueOf(((RecipeActivity)getActivity()).getViewModel().getStepActive().getId()));
+        //updateInstruction(((RecipeActivity)getActivity()).getViewModel().getStepActive());
 
         return rootView;
     }
@@ -151,15 +167,25 @@ public class RecipeInstructionFragment extends Fragment{
 
     @Override
     public void onStart() {
+        Log.d(TAG, "onStart: ");
         super.onStart();
         if (Util.SDK_INT > 23){
             // TODO: 14/05/2018 set player
+            //updateInstruction(mStepActive);
+            Log.d(TAG, "onCreateView: active step="+String.valueOf(((RecipeActivity)getActivity()).getViewModel().getStepActive().getId()));
+            updateInstruction(((RecipeActivity)getActivity()).getViewModel().getStepActive());
+
         }
     }
 
     @Override
     public void onStop() {
+        Log.d(TAG, "onStop: ");
         super.onStop();
+
+        //if (mExoPlayer != null && mExoPlayer.getContentPosition() != 0)
+
+
         if (Util.SDK_INT > 23){
             releasePlayer();
         }
@@ -167,19 +193,18 @@ public class RecipeInstructionFragment extends Fragment{
 
     @Override
     public void onResume() {
+        Log.d(TAG, "onResume: ");
         super.onResume();
-        if (Util.SDK_INT <= 23 || mExoPlayer == null) {
-            // TODO: 14/05/2018 set player
-        }
     }
 
     @Override
     public void onPause() {
+        Log.d(TAG, "onPause: ");
         super.onPause();
 
         //if (mExoPlayer != null && mExoPlayer.getContentPosition() != 0)
         if (mExoPlayer != null)
-            mPlaybackPosition = mExoPlayer.getCurrentPosition();
+            setPlaybackPosition(mExoPlayer.getCurrentPosition());
 
         if (Util.SDK_INT <= 23)
             releasePlayer();
@@ -205,8 +230,27 @@ public class RecipeInstructionFragment extends Fragment{
     }
 */
 
+    private void setPlaybackPosition(long pos){
+        Log.d(TAG, "setPlaybackPosition: set to :"+ String.valueOf(pos));
+        mPlaybackPosition = pos;
+    }
+
     public void updateInstruction(Step step){
         if (step != null){
+
+            String ns = mStepActive==null?"null":String.valueOf(mStepActive.getId());
+            Log.d(TAG, "updateInstruction: Previous Step["+String.valueOf(step.getId())+"] New Step ["+ns+"]");
+
+            if (mStepActive != null){
+                if (step.getId() != mStepActive.getId()) {
+                    releasePlayer();
+                    setPlaybackPosition(0);
+                }
+            }
+
+            //if (mStepActive != step)
+                mStepActive = step;
+
             //Step step = mRecipe.getSteps().get(stepId);
             Log.d(TAG, "updateInstruction: select["+step.getShortDescription()+"] at pos["+String.valueOf(step.getId())+"]");
 
@@ -240,7 +284,11 @@ public class RecipeInstructionFragment extends Fragment{
                     .createMediaSource(videoUri);
             mExoPlayer.prepare(mediaSource);
 
-            //mExoPlayer.seekTo(mPlaybackPosition);
+            //if (mPlaybackPosition > 0) {
+                Log.d(TAG, "initializeExoPlayer: seek to:"+String.valueOf(mPlaybackPosition));
+                mExoPlayer.seekTo(mPlaybackPosition);
+            //}
+
             mExoPlayer.setPlayWhenReady(true);
         }
     }
@@ -251,7 +299,9 @@ public class RecipeInstructionFragment extends Fragment{
             mTvInstructionTitle.setText("NO VIDEO");
             mTvMessageNoVideo.setVisibility(View.VISIBLE);
             // TODO: 14/05/2018 Set text string
+            // TODO: 15/05/2018 tear down player?
             mExoPlayerView.setVisibility(View.GONE);
+            //releasePlayer();
         }
         else{
             // TODO: 14/05/2018 Hide alternative image
