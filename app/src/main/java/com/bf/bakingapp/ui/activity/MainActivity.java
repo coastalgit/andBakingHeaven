@@ -3,7 +3,10 @@ package com.bf.bakingapp.ui.activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -21,6 +24,7 @@ import com.bf.bakingapp.adapter.RecipeAdapter;
 import com.bf.bakingapp.manager.RecipeManager;
 import com.bf.bakingapp.model.Recipe;
 import com.bf.bakingapp.utility.NetworkUtils;
+import com.bf.bakingapp.utility.SimpleIdlingResource;
 import com.bf.bakingapp.viewmodel.ViewModelMain;
 
 import java.util.ArrayList;
@@ -44,6 +48,24 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     @BindView(R.id.recyclerview_recipes)
     RecyclerView mRecyclerViewRecipes;
 
+    //region Espresso
+    // The Idling Resource which will be null in production.
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+
+    /**
+     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+    //endregion Espresso
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         ButterKnife.bind(this);
 
         mNetworkUtils = new NetworkUtils();
+        getIdlingResource();
 
         mRecipeAdapter = new RecipeAdapter(this, this);
         mRecyclerViewRecipes.setAdapter(mRecipeAdapter);
@@ -66,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
             displayErrorMessage(true, errorStr);
         }
     }
+
 
     private void attachViewModel() {
         mRecipesViewModel = ViewModelProviders.of(this).get(ViewModelMain.class);
