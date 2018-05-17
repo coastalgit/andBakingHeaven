@@ -74,7 +74,10 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         ButterKnife.bind(this);
 
         mNetworkUtils = new NetworkUtils();
+
         getIdlingResource();
+        if (mIdlingResource != null)
+            mIdlingResource.setIdleState(false);
 
         mRecipeAdapter = new RecipeAdapter(this, this);
         mRecyclerViewRecipes.setAdapter(mRecipeAdapter);
@@ -134,6 +137,9 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                     public void run() {
                         displayErrorMessage(false,"");
                         mRecipeAdapter.reloadAdapter(recipes);
+
+                        if (mIdlingResource != null)
+                            mIdlingResource.setIdleState(true);
                     }
                 });
             }
