@@ -48,7 +48,6 @@ public class MainActivityToRecipeActivityTest {
         Intents.release();
     }
 
-
 }
 
 

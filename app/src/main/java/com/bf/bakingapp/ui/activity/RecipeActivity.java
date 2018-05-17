@@ -2,18 +2,15 @@ package com.bf.bakingapp.ui.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.bf.bakingapp.R;
+import com.bf.bakingapp.manager.RecipeManager;
 import com.bf.bakingapp.model.Recipe;
 import com.bf.bakingapp.model.Step;
 import com.bf.bakingapp.ui.fragments.RecipeInstructionFragment;
@@ -38,14 +35,9 @@ public class RecipeActivity extends AppCompatActivity implements
 
     ViewModelRecipe mViewModel;
 
-    //private Recipe mRecipe;
-    private boolean mIsLandscape = false;
+    //private boolean mIsLandscape = false;
     private boolean mIsTwoPane = false;
 
-    TextView mTvRecipeStepTitle;
-    TextView mTvRecipeInstructionTitle;
-
-    //Toolbar mToolbar;
     FragmentManager mFragmentManager;
     Fragment mFragmentSteps;
     Fragment mFragmentInstructions;
@@ -56,9 +48,7 @@ public class RecipeActivity extends AppCompatActivity implements
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_recipe);
 
-        //mToolbar = (Toolbar)findViewById(R.id)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mViewModel = ViewModelProviders.of(this).get(ViewModelRecipe.class);
@@ -68,68 +58,44 @@ public class RecipeActivity extends AppCompatActivity implements
                 Log.d(TAG, "onCreate: Has INTENT. Recipe is "+mViewModel.getRecipe()==null?"NULL":"NOT NULL");
             }
         }
-        else{
+        else
             Log.d(TAG, "onCreate: VM has recipe");
-        }
+
+        updateWidgetStorageWithIngredients(mViewModel.getRecipe());
 
         mIsTwoPane = getResources().getBoolean(R.bool.is_tabletsize);
-        mIsLandscape = getResources().getBoolean(R.bool.is_landscape);
+        //mIsLandscape = getResources().getBoolean(R.bool.is_landscape);
 
         mFragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
             Log.d(TAG, "onCreate: NO INSTANCE");
-            //mFragmentSteps = RecipeStepsFragment.newInstance(mViewModel.getRecipe());
-            //mFragmentManager.beginTransaction()
-            //        .add(R.id.layout_main_steps, mFragmentSteps, FRAGMENT_STEPS_TAG)
-            //        .commit();
             applyFragment(mFragmentSteps, R.id.layout_main_steps, FRAGMENT_STEPS_TAG);
 
             mFragmentInstructions = RecipeInstructionFragment.newInstance(mViewModel.getRecipe());
             if (mIsTwoPane) {
-//                mFragmentManager.beginTransaction()
-//                        .add(R.id.layout_main_instructions, mFragmentInstructions, FRAGMENT_INSTRUCTION_TAG)
-//                        .commit();
-
                 applyFragment(mFragmentInstructions, R.id.layout_main_instructions, FRAGMENT_INSTRUCTION_TAG);
-
-                // TODO: 25/04/2018 Cater for saves step
-                //Step step = mViewModel.getRecipe().getSteps().get(0);
-                //((RecipeInstructionFragment)mFragmentInstructions).updateInstruction(step);
             }
-
-            updateWidgetWithBroadcast();
         }
         else{
             Log.d(TAG, "onCreate: HAVE INSTANCE");
-
             mFragmentSteps = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_STEPS);
-            //if (mIsTwoPane) {
-                mFragmentInstructions = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_INSTRUCTION);
-            //}
-            //((RecipeStepsFragment)mFragmentSteps).highlightActiveStep(mViewModel.getStepActive().getId());
-            //onStepClick(mViewModel.getStepActive());
+            mFragmentInstructions = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_INSTRUCTION);
         }
 
-// TODO: 26/04/2018 save psotion, and update instruction view (including hiding of relevant back/fwd arrows
-
-        //buildView();
-
+        updateWidgetWithBroadcast();
+        
         if (mViewModel.getRecipe() != null) {
             Log.d(TAG, "onCreate: Recipe selected:[" + mViewModel.getRecipe().getName() + "]");
             getSupportActionBar().setTitle(mViewModel.getRecipe().getName());
 
             if (savedInstanceState == null)
-            //    onStepClick(mViewModel.getRecipe().getSteps().get(0)); // default selection
                 mViewModel.setStepActive(mViewModel.getRecipe().getSteps().get(0));
 
-            populatePreliminaryFields(mViewModel.getRecipe());
+            //populatePreliminaryFields(mViewModel.getRecipe());
             
             
-        } else {
-            // TODO: 25/04/2018 Display error
         }
-
     }
 
     @Override
@@ -137,13 +103,9 @@ public class RecipeActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case android.R.id.home:
                 if ((!mIsTwoPane) && (mFragmentInstructions != null && mFragmentInstructions.isVisible())){
-                    //mFragmentManager.beginTransaction().remove(mFragmentInstructions).commit();
                     applyFragment(mFragmentSteps, R.id.layout_main_steps, FRAGMENT_STEPS_TAG);
-                    //((RecipeStepsFragment)mFragmentSteps).highlightActiveStep(mViewModel.getStepActive().getId());
-                    //NavUtils.navigateUpFromSameTask(this);
                     return true;
                 }
-                //return true;
                 break;
             default:
         }
@@ -165,6 +127,10 @@ public class RecipeActivity extends AppCompatActivity implements
         catch (Exception exc){
             Log.e(TAG, "onSaveInstanceState: EXCEPTION:["+exc.getLocalizedMessage()+"]" );
         }
+    }
+
+    private void updateWidgetStorageWithIngredients(Recipe recipe){
+        RecipeManager.getInstance().setRecipe(recipe);
     }
 
     @Override
@@ -209,63 +175,31 @@ public class RecipeActivity extends AppCompatActivity implements
         intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
         sendBroadcast(intent);
     }
-    
-    private void buildView(){
-        //determine layout for device
-//        mIsTwoPane = getResources().getBoolean(R.bool.is_tabletsize);
-//        mIsLandscape = getResources().getBoolean(R.bool.is_landscape);
-
-//        mTvRecipeStepTitle = findViewById(R.id.tv_steps_title);
-//        if (mIsTwoPane){
-//            mTvRecipeStepTitle = findViewById(R.id.tv_instruction_title);
-//        }
-    }
-
-
-
-    private void populatePreliminaryFields(Recipe recipe){
-//        mTvRecipeStepTitle.setText(recipe.getName());
-//        if (mTvRecipeInstructionTitle != null)
-//            mTvRecipeInstructionTitle.setText("INSTRUCTIONS FOR "+ recipe.getName());
-    }
 
     public void onRecipeStepSelected(int position){
         Log.d(TAG, "onRecipeStepSelected: pos="+String.valueOf(position));
     }
 
-    private void highlightStepOnVisibleFragmentAtPosition(int position){
-
-    }
-
     @Override
     public void onFragmentStepNav_Back() {
-        //int current_pos = ((RecipeStepsFragment)mFragmentSteps).getStepsAdapter().getSelectedPosition();
         int current_pos = mViewModel.getStepActive().getId();
         Log.d(TAG, "onFragmentStepNav_Back: current pos:"+String.valueOf(current_pos));
-        //if ((current_pos > 0) && (mFragmentSteps.isVisible()))
+
         if (current_pos > 0) {
             int new_pos = current_pos-1;
             mViewModel.setStepActive(mViewModel.getRecipe().getSteps().get(new_pos));
-            if (mIsTwoPane) {
-                //if (mFragmentSteps.isVisible())
+
+            if (mIsTwoPane)
                 ((RecipeStepsFragment) mFragmentSteps).highlightActiveStep(new_pos);
-            }
-            else {
-                //((RecipeInstructionFragment) mFragmentInstructions).updateInstruction(current_pos - 1);
+            else
                 ((RecipeInstructionFragment) mFragmentInstructions).updateInstruction(mViewModel.getStepActive());
-            }
         }
-        //mViewModel.setStepActive(mViewModel.getRecipe().getSteps().get(current_pos));
     }
 
     @Override
     public void onFragmentStepNav_Forward() {
-        //int current_pos = ((RecipeStepsFragment)mFragmentSteps).getStepsAdapter().getSelectedPosition();
         int current_pos = mViewModel.getStepActive().getId();
         Log.d(TAG, "onFragmentStepNav_Forward: current pos:"+String.valueOf(current_pos));
-//        if (current_pos < mViewModel.getRecipe().getSteps().size())
-//            ((RecipeStepsFragment)mFragmentSteps).highlightActiveStep(current_pos+1);
-//        mViewModel.setStepActive(mViewModel.getRecipe().getSteps().get(current_pos));
 
         if (current_pos < mViewModel.getRecipe().getSteps().size()){
             int new_pos = current_pos+1;
@@ -275,9 +209,6 @@ public class RecipeActivity extends AppCompatActivity implements
             else
                 ((RecipeInstructionFragment) mFragmentInstructions).updateInstruction(mViewModel.getStepActive());
         }
-
-        //mViewModel.setStepActive(mViewModel.getRecipe().getSteps().get(current_pos));
-
     }
 
     @Override
@@ -285,22 +216,16 @@ public class RecipeActivity extends AppCompatActivity implements
         Log.d(TAG, "onStepClick: step:["+String.valueOf(step.getId())+"]["+step.getShortDescription()+"]");
         mViewModel.setStepActive(step);
 
-        if (!mIsTwoPane){
-            // on phone, show instructions fragment if we are on Steps fragment
-            //if (mFragmentSteps!=null && mFragmentSteps.isVisible()) {
-                applyFragment(mFragmentInstructions, R.id.layout_main_steps, FRAGMENT_INSTRUCTION_TAG);
-            //}
-        }
-        //else
-            updateInstructionPane(step);
+        if (!mIsTwoPane)
+            applyFragment(mFragmentInstructions, R.id.layout_main_steps, FRAGMENT_INSTRUCTION_TAG);
+
+        updateInstructionPane(step);
     }
 
     private void applyFragment(Fragment frag, int layoutId, String fragTag){
         if (frag != null)
             mFragmentManager.beginTransaction().replace(layoutId, frag, fragTag).commit();
         else{
-            //mFragmentSteps = RecipeStepsFragment.newInstance(mViewModel.getRecipe());
-            //mFragmentInstructions = RecipeInstructionFragment.newInstance(mViewModel.getRecipe());
             switch (fragTag){
                 case FRAGMENT_STEPS_TAG:
                     frag = mFragmentSteps = RecipeStepsFragment.newInstance(mViewModel.getRecipe());
@@ -316,15 +241,7 @@ public class RecipeActivity extends AppCompatActivity implements
     }
 
     private void updateInstructionPane(Step step){
-        //if (mIsTwoPane){
-            //if (mFragmentManager.findFragmentByTag(FRAGMENT_INSTRUCTION_TAG) != null) {
-        if (mFragmentInstructions!=null && mFragmentInstructions.isVisible())  {
-                ((RecipeInstructionFragment)mFragmentInstructions).updateInstruction(step);
-            }
-        //}
-        //else{
-            // TODO: 25/04/2018
-            // new activitry?
-       // }
+        if (mFragmentInstructions!=null && mFragmentInstructions.isVisible())
+           ((RecipeInstructionFragment)mFragmentInstructions).updateInstruction(step);
     }
 }

@@ -23,7 +23,6 @@ public class ViewModelMain extends AndroidViewModel {
 
     private RecipeWorker mWorker;
     private MutableLiveData<ArrayList<Recipe>> mRecipesObservable = new MutableLiveData<>();
-    //private LiveData<boolean> mConnectedObservable = new LiveData<boolean>();
 
     public ViewModelMain(@NonNull Application application) {
         super(application);
@@ -59,7 +58,6 @@ public class ViewModelMain extends AndroidViewModel {
     public MutableLiveData<ArrayList<Recipe>> getRecipesObservable() {
         if (mRecipesObservable == null)
             mRecipesObservable = new MutableLiveData<ArrayList<Recipe>>();
-            //getRecipesFromServer();
 
         return mRecipesObservable;
     }

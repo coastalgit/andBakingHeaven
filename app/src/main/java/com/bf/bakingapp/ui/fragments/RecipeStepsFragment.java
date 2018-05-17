@@ -37,18 +37,12 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
     }
 
     private Recipe mRecipe;
-//    public StepsAdapter getStepsAdapter() {
-//        return mStepsAdapter;
-//    }
     private StepsAdapter mStepsAdapter;
     private boolean mIsLandscape = false;
     private boolean mIsTwoPane = false;
 
     @BindView(R.id.recyclerview_steps)
     RecyclerView mRecyclerViewSteps;
-
-//    @BindView(R.id.tv_steps_title)
-//    TextView mTvStepsTitle;
 
     @BindView(R.id.btn_steps_showingredients)
     Button mBtnShowIngredients;
@@ -92,13 +86,6 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
 
         readBundle(getArguments());
 
-        if (savedInstanceState == null) {
-            Log.d(TAG, "onCreateView: NO  INSTANCE");
-        }
-        else{
-            Log.d(TAG, "onCreateView: HAVE INSTANCE");
-        }
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerViewSteps.setLayoutManager(linearLayoutManager);
         mRecyclerViewSteps.setHasFixedSize(true);
@@ -135,17 +122,8 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
         Log.d(TAG, "highlightActiveStep: pos="+String.valueOf(pos));
         if (mRecyclerViewSteps.findViewHolderForAdapterPosition(pos) != null)
             mRecyclerViewSteps.findViewHolderForAdapterPosition(pos).itemView.performClick();
-        mStepsAdapter.setSelectedPosition(pos);
-        //mRecyclerViewSteps.scrollToPosition(pos);
-        //mRecyclerViewSteps.smoothScrollToPosition(pos);
-        //mRecyclerViewSteps.getLayoutManager().smoothScrollToPosition(mRecyclerViewSteps, null, pos);
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                mRecyclerViewSteps.getLayoutManager().scrollToPosition(pos);
-//            }
-//        });
 
+        mStepsAdapter.setSelectedPosition(pos);
     }
 
     @Override
@@ -154,9 +132,6 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
         super.onAttach(context);
         if (context instanceof OnStepsFragmentInteractionListener) {
             mListener = (OnStepsFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnStepsFragmentInteractionListener");
         }
     }
 

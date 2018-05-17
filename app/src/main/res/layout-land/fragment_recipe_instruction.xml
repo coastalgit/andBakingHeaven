@@ -9,14 +9,15 @@
         android:id="@+id/layout_instruct_exowrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_instruction_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="VIDEO" />
+            android:text="VIDEO"
+            android:visibility="gone"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -35,6 +36,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:visibility="invisible"
+                android:textColor="@color/colorWhite"
                 android:text="Video not available" />
 
         </RelativeLayout>

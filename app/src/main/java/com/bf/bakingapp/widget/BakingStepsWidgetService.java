@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class BakingStepsWidgetService extends RemoteViewsService {
 
-    private static final String TAG = BakingStepsWidgetService.class.getSimpleName();
+    //private static final String TAG = BakingStepsWidgetService.class.getSimpleName();
 
     public BakingStepsWidgetService() {
     }
@@ -27,7 +27,6 @@ public class BakingStepsWidgetService extends RemoteViewsService {
     class BakingStepsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         Context mContext;
-        //String mRecipeHeader = "";
         ArrayList<Ingredient> mIngredientList = new ArrayList<>();
 
         public BakingStepsRemoteViewsFactory(Context appContext) {
@@ -36,8 +35,6 @@ public class BakingStepsWidgetService extends RemoteViewsService {
         }
 
         private void updateRecipeData(){
-            //mRecipeHeader = RecipeManager.getInstance().getRecipe().getName();
-
             if (RecipeManager.getInstance().getRecipe() != null) {
                 if (RecipeManager.getInstance().getRecipe().getIngredients().size() > 0)
                     mIngredientList = (ArrayList<Ingredient>) RecipeManager.getInstance().getRecipe().getIngredients();

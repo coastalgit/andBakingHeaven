@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.bf.bakingapp.R;
 import com.bf.bakingapp.adapter.RecipeAdapter;
-import com.bf.bakingapp.manager.RecipeManager;
 import com.bf.bakingapp.model.Recipe;
 import com.bf.bakingapp.utility.NetworkUtils;
 import com.bf.bakingapp.utility.SimpleIdlingResource;
@@ -43,19 +42,21 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
     @BindView(R.id.layout_main_error)
     LinearLayout mLayoutError;
-    @BindView(R.id.tv_main_label)
-    TextView mMainLabel;
+    @BindView(R.id.tv_error_label)
+    TextView mTvLabelError;
+
+    @BindView(R.id.layout_main_info)
+    LinearLayout mLayoutInfo;
+    @BindView(R.id.tv_info_label)
+    TextView mTvLabelInfo;
+
     @BindView(R.id.recyclerview_recipes)
     RecyclerView mRecyclerViewRecipes;
 
     //region Espresso
-    // The Idling Resource which will be null in production.
     @Nullable
     private SimpleIdlingResource mIdlingResource;
 
-    /**
-     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
-     */
     @VisibleForTesting
     @NonNull
     public IdlingResource getIdlingResource() {
@@ -85,24 +86,24 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         boolean isTablet = getResources().getBoolean(R.bool.is_landscape);
         applyLayoutManager(isTablet);
 
-        attachViewModel();
-
-        if (!mNetworkUtils.isConnected(this)) {
-            String errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) +")";
-            displayErrorMessage(true, errorStr);
-        }
+        loadRecipesIfConnected();
     }
 
-
+    private void loadRecipesIfConnected(){
+        if (!mNetworkUtils.isConnected(this)) {
+            String errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) +")";
+            displayInfoMessage(false, "");
+            displayErrorMessage(true, errorStr);
+        }
+        else{
+            displayErrorMessage(false, "");
+            displayInfoMessage(true, "Fetching heavenly recipes...");
+            attachViewModel();
+        }
+    }
     private void attachViewModel() {
         mRecipesViewModel = ViewModelProviders.of(this).get(ViewModelMain.class);
         subscribe();
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "onResume: ");
-        super.onResume();
     }
 
     private void subscribe() {
@@ -122,38 +123,38 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mRecyclerViewRecipes.setLayoutManager(linearLayoutManager);
         }
-        // TODO: 24/04/2018 Divider
+
         DividerItemDecoration divider = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         divider.setDrawable(getResources().getDrawable(R.drawable.divider_line));
         mRecyclerViewRecipes.addItemDecoration(divider);
     }
 
     private void reloadRecipeAdapter(final ArrayList<Recipe> recipes){
+        if (recipes != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    displayInfoMessage(false,"");
+                    displayErrorMessage(false,"");
+                    mRecipeAdapter.reloadAdapter(recipes);
 
-//        if (mNetworkUtils.isConnected(this)) {
-            if (recipes != null) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        displayErrorMessage(false,"");
-                        mRecipeAdapter.reloadAdapter(recipes);
-
-                        if (mIdlingResource != null)
-                            mIdlingResource.setIdleState(true);
-                    }
-                });
-            }
-//        }
-//        else{
-//            String errorStr = getString(R.string.availablenot) + " (" + getString(R.string.connection) +")";
-//            displayErrorMessage(true, errorStr);
-//        }
+                    if (mIdlingResource != null)
+                        mIdlingResource.setIdleState(true);
+                }
+            });
+        }
     }
 
     private void displayErrorMessage(boolean show, String msg){
         mRecyclerViewRecipes.setVisibility(show?View.INVISIBLE:View.VISIBLE);
         mLayoutError.setVisibility(show?View.VISIBLE:View.INVISIBLE);
-        mMainLabel.setText(msg);
+        mTvLabelError.setText(msg);
+    }
+
+    private void displayInfoMessage(boolean show, String msg){
+        mRecyclerViewRecipes.setVisibility(show?View.INVISIBLE:View.VISIBLE);
+        mLayoutInfo.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+        mTvLabelInfo.setText(msg);
     }
 
     private void loadRecipeDetails(Recipe recipe){
@@ -162,21 +163,14 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         startActivity(recipeIntent);
     }
 
-    private void updateWidgetStorageWithIngredients(Recipe recipe){
-        RecipeManager.getInstance().setRecipe(recipe);
-        // TODO: 01/05/2018 Save to disk with (app) context
-    }
-
     @OnClick(R.id.btn_retry)
     public void btnRetry_onClick(Button btn){
-        subscribe();
-        mRecipesViewModel.getRecipesFromServer();
+        loadRecipesIfConnected();
     }
 
     @Override
     public void onClick(Recipe recipe) {
         Log.d(TAG, "onClick: Recipe:["+recipe.getId()+"]");
-        updateWidgetStorageWithIngredients(recipe);
         loadRecipeDetails(recipe);
     }
 

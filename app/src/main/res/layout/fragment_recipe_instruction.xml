@@ -9,14 +9,15 @@
         android:id="@+id/layout_instruct_exowrapper"
         android:layout_width="match_parent"
         android:layout_height="230dp"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_instruction_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="VIDEO" />
+            android:text="VIDEO"
+            android:visibility="gone"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -35,6 +36,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:visibility="invisible"
+                android:textColor="@color/colorWhite"
                 android:text="Video not available" />
 
         </RelativeLayout>
@@ -47,7 +49,7 @@
         android:layout_above="@+id/layout_instruct_navcontrolswrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorWhite"
         android:orientation="vertical">
 
         <TextView
@@ -59,7 +61,8 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:maxLines="30"
-            android:textSize="11sp"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimaryExtraDark"
             android:gravity="center"
             android:text="FULL DESC" />
     </LinearLayout>
@@ -69,7 +72,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/colorWhite"
+        android:background="@color/colorPrimaryDark"
         android:orientation="horizontal">
 
         <ImageButton

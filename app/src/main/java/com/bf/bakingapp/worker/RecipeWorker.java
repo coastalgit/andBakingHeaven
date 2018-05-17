@@ -45,7 +45,6 @@ public class RecipeWorker {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if (response.isSuccessful()){
-                    //SiteManager.getInstance().getSiteConfig().setPriorities(response.body().getPriorities());
                     ArrayList<Recipe> recipeList = (ArrayList<Recipe>) response.body();
                     int recipeCount = 0;
                     if (recipeList != null){

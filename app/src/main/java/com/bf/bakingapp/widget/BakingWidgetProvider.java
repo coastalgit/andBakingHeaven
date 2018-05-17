@@ -20,8 +20,10 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, BakingStepsWidgetService.class);
         views.setRemoteAdapter(R.id.lv_widget, intent);
 
+        String widgetTitle = "No recipe selected";
         if (RecipeManager.getInstance().getRecipe() != null)
-            views.setTextViewText(R.id.tv_widget_title, RecipeManager.getInstance().getRecipe().getName());
+            widgetTitle = RecipeManager.getInstance().getRecipe().getName();
+            views.setTextViewText(R.id.tv_widget_title, widgetTitle);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
    }
