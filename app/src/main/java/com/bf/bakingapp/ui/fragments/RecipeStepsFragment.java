@@ -162,6 +162,7 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
 
     @Override
     public void onDetach() {
+        Log.d(TAG, "onDetach: ");
         super.onDetach();
         mListener = null;
     }

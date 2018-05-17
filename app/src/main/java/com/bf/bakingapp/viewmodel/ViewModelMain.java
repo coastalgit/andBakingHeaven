@@ -36,7 +36,6 @@ public class ViewModelMain extends AndroidViewModel {
                 @Override
                 public void onResponse_OK(ArrayList<Recipe> recipes) {
                     Log.d(TAG, "onResponse_OK: ");
-                    //mRecipesObservable.setValue(recipes);
                     setRecipesObservable(recipes);
                 }
 
