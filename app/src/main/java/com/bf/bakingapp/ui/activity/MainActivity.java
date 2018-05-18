@@ -1,6 +1,5 @@
 package com.bf.bakingapp.ui.activity;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -32,13 +31,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+@SuppressWarnings("WeakerAccess")
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.RecipeAdapterOnClickHandler {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    ViewModelMain mRecipesViewModel;
-    NetworkUtils mNetworkUtils;
-    RecipeAdapter mRecipeAdapter;
+    private ViewModelMain mRecipesViewModel;
+    private NetworkUtils mNetworkUtils;
+    private RecipeAdapter mRecipeAdapter;
 
     @BindView(R.id.layout_main_error)
     LinearLayout mLayoutError;
@@ -107,12 +107,8 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     }
 
     private void subscribe() {
-        mRecipesViewModel.getRecipesObservable().observe(this, new Observer<ArrayList<Recipe>>() {
-            @Override
-            public void onChanged(@Nullable ArrayList<Recipe> recipes) {
-                reloadRecipeAdapter(recipes);
-            }
-        });
+        //noinspection Convert2MethodRef
+        mRecipesViewModel.getRecipesObservable().observe(this, recipes -> reloadRecipeAdapter(recipes));
     }
 
     private void applyLayoutManager(boolean asGrid) {
@@ -131,16 +127,13 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
     private void reloadRecipeAdapter(final ArrayList<Recipe> recipes){
         if (recipes != null) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    displayInfoMessage(false,"");
-                    displayErrorMessage(false,"");
-                    mRecipeAdapter.reloadAdapter(recipes);
+            runOnUiThread(() -> {
+                displayInfoMessage(false,"");
+                displayErrorMessage(false,"");
+                mRecipeAdapter.reloadAdapter(recipes);
 
-                    if (mIdlingResource != null)
-                        mIdlingResource.setIdleState(true);
-                }
+                if (mIdlingResource != null)
+                    mIdlingResource.setIdleState(true);
             });
         }
     }
@@ -163,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         startActivity(recipeIntent);
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.btn_retry)
     public void btnRetry_onClick(Button btn){
         loadRecipesIfConnected();

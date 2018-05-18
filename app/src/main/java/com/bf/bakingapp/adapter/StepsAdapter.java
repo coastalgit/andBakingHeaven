@@ -17,27 +17,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bf.bakingapp.R;
-import com.bf.bakingapp.model.Recipe;
 import com.bf.bakingapp.model.Step;
 
 import java.util.ArrayList;
 
-import static com.bf.bakingapp.common.Constants.Fonts.FONT_INDIEFLOWER;
 import static com.bf.bakingapp.common.Constants.Fonts.FONT_TITILLIUM_REGULAR;
 
+@SuppressWarnings("unused")
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.RecipesAdapterViewHolder> {
 
     private static final String TAG = StepsAdapter.class.getSimpleName();
 
     private final Context mContext;
     private ArrayList<Step> mSteps;
-    StepsAdapterOnClickHandler mListener;
+    private StepsAdapterOnClickHandler mListener;
 
     public void setSelectedPosition(int mSelectedPosition) {
         this.mSelectedPosition = mSelectedPosition;
     }
 
-    int mSelectedPosition = 0;
+    private int mSelectedPosition = 0;
 
     public int getSelectedPosition() {
         return mSelectedPosition;
@@ -100,21 +99,18 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.RecipesAdapt
             //Typeface font = Typeface.createFromAsset(mContext.getAssets(), FONT_INDIEFLOWER);
             recipeDescShort.setTypeface(font);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = getAdapterPosition();
+            itemView.setOnClickListener(view -> {
+                int pos = getAdapterPosition();
 
-                    if (pos == RecyclerView.NO_POSITION)
-                        return;
+                if (pos == RecyclerView.NO_POSITION)
+                    return;
 
-                    notifyItemChanged(mSelectedPosition);
-                    mSelectedPosition = pos;
-                    notifyItemChanged(mSelectedPosition);
+                notifyItemChanged(mSelectedPosition);
+                mSelectedPosition = pos;
+                notifyItemChanged(mSelectedPosition);
 
-                    Step step = mSteps.get(pos);
-                    mListener.onClick(step);
-                }
+                Step step = mSteps.get(pos);
+                mListener.onClick(step);
             });
         }
 

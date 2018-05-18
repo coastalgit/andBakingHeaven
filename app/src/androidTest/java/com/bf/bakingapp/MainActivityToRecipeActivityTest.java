@@ -24,15 +24,13 @@ import com.bf.bakingapp.ui.activity.RecipeActivity;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityToRecipeActivityTest {
 
-    private IdlingResource mIdlingResource;
-
     @Rule
     public ActivityTestRule<MainActivity> mMainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void registerIdlingResource()
     {
-        mIdlingResource = mMainActivityTestRule.getActivity().getIdlingResource();
+        IdlingResource mIdlingResource = mMainActivityTestRule.getActivity().getIdlingResource();
         IdlingRegistry.getInstance().register(mIdlingResource);
     }
 

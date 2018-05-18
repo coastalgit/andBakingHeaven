@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context="com.bf.bakingapp.ui.activity.MainActivity">
+    tools:context="com.bf.bakingapp.ui.activity.MainActivity"
+    tools:ignore="Overdraw">
 
     <LinearLayout
         android:id="@+id/layout_main_info"
@@ -20,7 +19,7 @@
             android:id="@+id/tv_info_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Connecting"
+            android:text="@string/connecting"
             android:textSize="20sp"
             android:layout_gravity="center"
             android:textColor="@color/colorWhite"
@@ -33,7 +32,7 @@
             android:layout_gravity="center"
             android:layout_margin="15dp"
             android:scaleType="fitXY"
-            />
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
@@ -49,7 +48,7 @@
             android:id="@+id/tv_error_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Connecting"
+            android:text="@string/connecting"
             android:textSize="20sp"
             android:layout_gravity="center"
             android:textColor="@color/colorWhite"
@@ -63,7 +62,7 @@
             android:background="@color/colorWhite"
             android:layout_margin="15dp"
             android:layout_gravity="center"
-            android:text="Retry"/>
+            android:text="@string/retry"/>
 
     </LinearLayout>
 

@@ -2,10 +2,9 @@ package com.bf.bakingapp.ui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsAdapterOnClickHandler {
 
     private static final String TAG = RecipeStepsFragment.class.getSimpleName();
@@ -38,9 +38,12 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
 
     private Recipe mRecipe;
     private StepsAdapter mStepsAdapter;
+    @SuppressWarnings("unused")
     private boolean mIsLandscape = false;
+    @SuppressWarnings("unused")
     private boolean mIsTwoPane = false;
 
+    @SuppressWarnings("WeakerAccess")
     @BindView(R.id.recyclerview_steps)
     RecyclerView mRecyclerViewSteps;
 
@@ -75,7 +78,7 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: (Steps)");
         View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
@@ -92,18 +95,14 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
         mStepsAdapter = new StepsAdapter(getActivity(),this);
         mRecyclerViewSteps.setAdapter(mStepsAdapter);
 
-        mStepsAdapter.reloadAdapter(new ArrayList<Step>(mRecipe.getSteps()));
+        mStepsAdapter.reloadAdapter(new ArrayList<>(mRecipe.getSteps()));
 
+        assert getActivity() != null;
         Log.d(TAG, "onCreateView: active step="+String.valueOf(((RecipeActivity)getActivity()).getViewModel().getStepActive().getId()));
         Step activeStep  = ((RecipeActivity)getActivity()).getViewModel().getStepActive();
         if (activeStep != null)
             highlightActiveStep(((RecipeActivity)getActivity()).getViewModel().getStepActive().getId());
         return rootView;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -155,6 +154,7 @@ public class RecipeStepsFragment extends Fragment implements StepsAdapter.StepsA
         }
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.btn_steps_showingredients)
     public void btnShowIngredients_onClick(Button btn){
         showIngredients();

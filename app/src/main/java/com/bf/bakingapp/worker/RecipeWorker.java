@@ -5,6 +5,7 @@ package com.bf.bakingapp.worker;
  * Created on 24/04/2018
  */
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.bf.bakingapp.client.IRestClient;
@@ -25,6 +26,7 @@ public class RecipeWorker {
 
     private static final String TAG = RecipeWorker.class.getSimpleName();
 
+    @SuppressWarnings("unused")
     public interface IWorkerOnResponseHandler{
         void onResponse_OK(ArrayList<Recipe> recipes);
         void onResponse_Fail(Enums.ApiErrorCode errorCode, String errorMessage);
@@ -43,12 +45,11 @@ public class RecipeWorker {
 
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+            public void onResponse(@NonNull Call<List<Recipe>> call, @NonNull Response<List<Recipe>> response) {
                 if (response.isSuccessful()){
                     ArrayList<Recipe> recipeList = (ArrayList<Recipe>) response.body();
-                    int recipeCount = 0;
                     if (recipeList != null){
-                        recipeCount = recipeList.size();
+                        int recipeCount = recipeList.size();
                         Log.d(TAG, "onResponse: Recipe count:"+String.valueOf(recipeCount));
                         mListener.onResponse_OK(recipeList);
                     }
@@ -63,7 +64,7 @@ public class RecipeWorker {
             }
 
             @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Recipe>> call, @NonNull Throwable t) {
                 Log.d(TAG, "onFailure: ");
                 mListener.onResponse_Fail(Enums.ApiErrorCode.CONNECTION_ERROR, "Recipes connection error");
             }

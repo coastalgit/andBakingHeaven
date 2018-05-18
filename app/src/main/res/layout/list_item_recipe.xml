@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:background="@color/colorPrimaryDark"
         android:textColor="@color/colorWhite"
-        android:text="Recipe"
+        android:text="@string/recipe"
         android:gravity="center"
         android:textSize="32sp"
         android:paddingTop="30dp"

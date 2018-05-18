@@ -16,7 +16,7 @@
             android:id="@+id/tv_instruction_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="VIDEO"
+            android:text="@string/video"
             android:visibility="gone"/>
 
         <RelativeLayout
@@ -37,14 +37,13 @@
                 android:gravity="center"
                 android:visibility="invisible"
                 android:textColor="@color/colorWhite"
-                android:text="Video not available" />
+                android:text="@string/video_not_available" />
 
         </RelativeLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_instruct_fulldescwrapper"
         android:layout_below="@+id/layout_instruct_exowrapper"
         android:layout_above="@+id/layout_instruct_navcontrolswrapper"
         android:layout_width="match_parent"
@@ -64,7 +63,7 @@
             android:textSize="12sp"
             android:textColor="@color/colorPrimaryExtraDark"
             android:gravity="center"
-            android:text="FULL DESC" />
+            android:text="@string/full_description" />
     </LinearLayout>
 
     <RelativeLayout
@@ -85,7 +84,9 @@
             android:adjustViewBounds="true"
             android:padding="10dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_chevron_left" />
+            android:src="@drawable/ic_chevron_left"
+            tools:ignore="ContentDescription"
+            android:layout_alignParentStart="true" />
 
         <ImageButton
             android:id="@+id/btn_instruct_navforward"
@@ -97,7 +98,9 @@
             android:adjustViewBounds="true"
             android:padding="10dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_chevron_right" />
+            android:src="@drawable/ic_chevron_right"
+            tools:ignore="ContentDescription"
+            android:layout_alignParentEnd="true" />
 
 
     </RelativeLayout>

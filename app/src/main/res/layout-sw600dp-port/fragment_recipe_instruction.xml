@@ -25,12 +25,11 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_instruction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textColor="@color/colorWhite"
-                    android:text="INSTRUCTIONS"
+                    android:text="@string/instructions"
                     android:textSize="16sp"
                     android:gravity="center"
                     android:paddingBottom="20dp"
@@ -41,7 +40,7 @@
                     android:id="@+id/tv_instruction_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="VIDEO"
+                    android:text="@string/video"
                     android:visibility="gone"/>
 
                 <RelativeLayout
@@ -63,7 +62,7 @@
                         android:gravity="center"
                         android:visibility="invisible"
                         android:textColor="@color/colorWhite"
-                        android:text="Video not available" />
+                        android:text="@string/video_not_available"/>
 
                 </RelativeLayout>
 
@@ -76,12 +75,11 @@
         android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/layout_instruct_fulldescwrapper"
-                android:layout_above="@+id/layout_instruct_navcontrolswrapper"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorWhite"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="ScrollViewSize">
 
                 <TextView
                     android:id="@+id/tv_instruction_fulldesc"
@@ -95,7 +93,7 @@
                     android:textSize="12sp"
                     android:textColor="@color/colorPrimaryExtraDark"
                     android:gravity="center"
-                    android:text="FULL DESC" />
+                    android:text="@string/full_description" />
             </LinearLayout>
      </ScrollView>
 
@@ -117,7 +115,9 @@
                     android:adjustViewBounds="true"
                     android:padding="10dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_chevron_left" />
+                    android:src="@drawable/ic_chevron_left"
+                    tools:ignore="ContentDescription"
+                    android:layout_alignParentStart="true" />
 
                 <ImageButton
                     android:id="@+id/btn_instruct_navforward"
@@ -129,7 +129,9 @@
                     android:adjustViewBounds="true"
                     android:padding="10dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_chevron_right" />
+                    android:src="@drawable/ic_chevron_right"
+                    tools:ignore="ContentDescription"
+                    android:layout_alignParentEnd="true" />
 
 
             </RelativeLayout>

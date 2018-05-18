@@ -18,7 +18,6 @@ import com.bf.bakingapp.R;
 import com.bf.bakingapp.model.Recipe;
 
 import static com.bf.bakingapp.common.Constants.Fonts.FONT_INDIEFLOWER;
-import static com.bf.bakingapp.common.Constants.Fonts.FONT_TITILLIUM_REGULAR;
 
 import java.util.ArrayList;
 
@@ -26,7 +25,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipesAda
 
     private final Context mContext;
     private ArrayList<Recipe> mRecipes;
-    RecipeAdapterOnClickHandler mListener;
+    private RecipeAdapterOnClickHandler mListener;
 
     public interface RecipeAdapterOnClickHandler {
         void onClick(Recipe recipe);
@@ -80,13 +79,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipesAda
             Typeface font = Typeface.createFromAsset(mContext.getAssets(), FONT_INDIEFLOWER);
             recipeName.setTypeface(font);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = getAdapterPosition();
-                    Recipe recipe = mRecipes.get(pos);
-                    mListener.onClick(recipe);
-                }
+            itemView.setOnClickListener(view -> {
+                int pos = getAdapterPosition();
+                Recipe recipe = mRecipes.get(pos);
+                mListener.onClick(recipe);
             });
         }
 

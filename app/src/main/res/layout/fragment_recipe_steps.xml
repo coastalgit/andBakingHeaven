@@ -16,7 +16,7 @@
             android:background="@color/colorPrimaryDark"
             android:textColor="@color/colorWhite"
             android:layout_margin="10dp"
-            android:text="INGREDIENTS"/>
+            android:text="@string/ingredients"/>
     </LinearLayout>
 
 <!--

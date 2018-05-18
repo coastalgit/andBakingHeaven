@@ -6,6 +6,7 @@ package com.bf.bakingapp.common;
  */
 
 public class Enums {
+    @SuppressWarnings("unused")
     public enum ApiErrorCode {
         UNKNOWN,
         CONNECTION_ERROR,

@@ -17,7 +17,7 @@
         android:ellipsize="none"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="measure" />
+        android:text="@string/measure" />
 
     <TextView
         android:id="@+id/tv_ingredient_text"
@@ -32,6 +32,6 @@
         android:ellipsize="none"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="ingredient" />
+        android:text="@string/ingredient" />
 
 </LinearLayout>

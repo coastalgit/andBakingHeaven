@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <pattern value="com.bf.bakingapp.model.Recipe" method="setImage" />
+    <pattern value="com.bf.bakingapp.model.Recipe" method="getImage" />
+    <pattern value="com.bf.bakingapp.model.Recipe" method="setServings" />
+    <pattern value="com.bf.bakingapp.model.Recipe" method="getServings" />
+    <pattern value="com.bf.bakingapp.model.Recipe" method="setSteps" />
+    <pattern value="com.bf.bakingapp.model.Recipe" method="setIngredients" />
+    <pattern value="com.bf.bakingapp.model.Recipe" method="setName" />
+    <pattern value="com.bf.bakingapp.model.Recipe" method="setId" />
+    <pattern value="com.bf.bakingapp.model.Recipe" />
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />

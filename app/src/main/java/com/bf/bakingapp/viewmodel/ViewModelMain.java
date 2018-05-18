@@ -29,7 +29,7 @@ public class ViewModelMain extends AndroidViewModel {
         getRecipesFromServer();
     }
 
-    public void getRecipesFromServer(){
+    private void getRecipesFromServer(){
         if (mWorker == null)
             mWorker = new RecipeWorker(new RecipeWorker.IWorkerOnResponseHandler() {
                 @Override
@@ -48,15 +48,16 @@ public class ViewModelMain extends AndroidViewModel {
         mWorker.getRecipesFromServer();
     }
 
-    public void setRecipesObservable(ArrayList<Recipe> recipesObservable) {
+    private void setRecipesObservable(ArrayList<Recipe> recipesObservable) {
         if (mRecipesObservable == null)
-            mRecipesObservable = new MutableLiveData<ArrayList<Recipe>>();
+            mRecipesObservable = new MutableLiveData<>();
 
         mRecipesObservable.setValue(recipesObservable);
     }
 
     public MutableLiveData<ArrayList<Recipe>> getRecipesObservable() {
         if (mRecipesObservable == null)
+            //noinspection Convert2Diamond
             mRecipesObservable = new MutableLiveData<ArrayList<Recipe>>();
 
         return mRecipesObservable;

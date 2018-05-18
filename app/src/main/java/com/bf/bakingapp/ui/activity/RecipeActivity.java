@@ -18,6 +18,7 @@ import com.bf.bakingapp.ui.fragments.RecipeStepsFragment;
 import com.bf.bakingapp.viewmodel.ViewModelRecipe;
 import com.bf.bakingapp.widget.BakingWidgetProvider;
 
+@SuppressWarnings("ConstantConditions")
 public class RecipeActivity extends AppCompatActivity implements
         RecipeStepsFragment.OnStepsFragmentInteractionListener,
         RecipeInstructionFragment.OnInstructionFragmentInteractionListener{
@@ -33,14 +34,14 @@ public class RecipeActivity extends AppCompatActivity implements
         return mViewModel;
     }
 
-    ViewModelRecipe mViewModel;
+    private ViewModelRecipe mViewModel;
 
     //private boolean mIsLandscape = false;
     private boolean mIsTwoPane = false;
 
-    FragmentManager mFragmentManager;
-    Fragment mFragmentSteps;
-    Fragment mFragmentInstructions;
+    private FragmentManager mFragmentManager;
+    private Fragment mFragmentSteps;
+    private Fragment mFragmentInstructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,7 @@ public class RecipeActivity extends AppCompatActivity implements
         }
 
         updateWidgetWithBroadcast();
-        
+
         if (mViewModel.getRecipe() != null) {
             Log.d(TAG, "onCreate: Recipe selected:[" + mViewModel.getRecipe().getName() + "]");
             getSupportActionBar().setTitle(mViewModel.getRecipe().getName());
@@ -174,10 +175,6 @@ public class RecipeActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, BakingWidgetProvider.class);
         intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
         sendBroadcast(intent);
-    }
-
-    public void onRecipeStepSelected(int position){
-        Log.d(TAG, "onRecipeStepSelected: pos="+String.valueOf(position));
     }
 
     @Override

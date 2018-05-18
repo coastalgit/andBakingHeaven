@@ -1,5 +1,6 @@
 package com.bf.bakingapp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +14,6 @@ import com.bf.bakingapp.R;
 import com.bf.bakingapp.model.Ingredient;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /*
@@ -39,11 +39,11 @@ public class IngredientsAdapter extends ArrayAdapter<Ingredient> {
         return mIngredients.size();
     }
 
+    @SuppressLint("ViewHolder")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View ingredItem = convertView;
-        ingredItem = LayoutInflater.from(mContext).inflate(R.layout.list_item_ingredient,parent,false);
+        View ingredItem = LayoutInflater.from(mContext).inflate(R.layout.list_item_ingredient,parent,false);
 
         Ingredient ingredient = mIngredients.get(position);
 

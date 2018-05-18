@@ -2,12 +2,18 @@
     <string name="app_name">Baking Heaven</string>
     <string name="availablenot">Not available</string>
     <string name="connection">Connection</string>
-    <string name="title_recipestep_list">RecipeSteps</string>
-    <string name="title_recipestep_detail">RecipeStep Detail</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ingredients">Ingredients</string>
-    <string name="appwidget_text">I am a widget</string>
-    <string name="add_widget">Add widget</string>
+    <string name="connecting">Connecting</string>
+    <string name="retry">Retry</string>
+    <string name="video">VIDEO</string>
+    <string name="video_not_available">Video not available</string>
+    <string name="full_description">Full Description</string>
+    <string name="measure">measure</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="recipe">Recipe</string>
+    <string name="step">Step</string>
+    <string name="instructions">INSTRUCTIONS</string>
+    <string name="no_recipe_selected">No recipe selected</string>
 </resources>

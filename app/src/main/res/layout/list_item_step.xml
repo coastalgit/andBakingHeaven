@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:background="@color/colorWhite"
         android:textColor="@color/colorPrimaryExtraDark"
-        android:text="Step"
+        android:text="@string/step"
         android:gravity="center"
         android:textSize="18sp"
         android:paddingTop="10dp"

@@ -27,6 +27,7 @@ public class SimpleIdlingResource implements IdlingResource {
         mCallback = callback;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void setIdleState(boolean isIdleNow) {
         mIsIdleNow.set(isIdleNow);
         if (isIdleNow && mCallback != null) {

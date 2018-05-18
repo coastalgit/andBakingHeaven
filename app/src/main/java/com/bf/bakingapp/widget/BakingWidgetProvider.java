@@ -14,13 +14,13 @@ public class BakingWidgetProvider extends AppWidgetProvider {
 
     //private static final String TAG = BakingWidgetProvider.class.getSimpleName();
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_widget_provider);
         Intent intent = new Intent(context, BakingStepsWidgetService.class);
         views.setRemoteAdapter(R.id.lv_widget, intent);
 
-        String widgetTitle = "No recipe selected";
+        String widgetTitle = context.getString(R.string.no_recipe_selected);
         if (RecipeManager.getInstance().getRecipe() != null)
             widgetTitle = RecipeManager.getInstance().getRecipe().getName();
             views.setTextViewText(R.id.tv_widget_title, widgetTitle);
@@ -33,6 +33,7 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
 
         final String action = intent.getAction();
+        assert action != null;
         if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             ComponentName appWidget = new ComponentName(context, BakingWidgetProvider.class);

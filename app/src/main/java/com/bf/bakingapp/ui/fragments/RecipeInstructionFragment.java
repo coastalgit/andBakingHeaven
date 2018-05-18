@@ -40,6 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+@SuppressWarnings({"deprecation", "WeakerAccess"})
 public class RecipeInstructionFragment extends Fragment{
 
     private static final String TAG = RecipeInstructionFragment.class.getSimpleName();
@@ -106,7 +107,7 @@ public class RecipeInstructionFragment extends Fragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: (Instruction)");
         setRetainInstance(true);
@@ -152,6 +153,7 @@ public class RecipeInstructionFragment extends Fragment{
         Log.d(TAG, "onStart: ");
         super.onStart();
         if (Util.SDK_INT > 23){
+            assert getActivity() != null;
             Log.d(TAG, "onCreateView: active step="+String.valueOf(((RecipeActivity)getActivity()).getViewModel().getStepActive().getId()));
             updateInstruction(((RecipeActivity)getActivity()).getViewModel().getStepActive());
         }
@@ -206,7 +208,7 @@ public class RecipeInstructionFragment extends Fragment{
             Log.d(TAG, "updateInstruction: Previous Step["+String.valueOf(step.getId())+"] New Step ["+ns+"]");
 
             if (mStepActive != null){
-                if (step.getId() != mStepActive.getId()) {
+                if (!step.getId().equals(mStepActive.getId())) {
                     releasePlayer();
                     setPlaybackPosition(0);
                 }
@@ -230,6 +232,7 @@ public class RecipeInstructionFragment extends Fragment{
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void initializeExoPlayer(String videoUrl){
         if (mExoPlayer == null && !(TextUtils.isEmpty(videoUrl))){
 
@@ -257,12 +260,12 @@ public class RecipeInstructionFragment extends Fragment{
 
     private void setVideoDisplay(String videoUrl){
         if (TextUtils.isEmpty(videoUrl)){
-            mTvInstructionTitle.setText("NO VIDEO");
+            //mTvInstructionTitle.setText("NO VIDEO");
             mTvMessageNoVideo.setVisibility(View.VISIBLE);
             mExoPlayerView.setVisibility(View.GONE);
         }
         else{
-            mTvInstructionTitle.setText(videoUrl);
+            //mTvInstructionTitle.setText(videoUrl);
             mTvMessageNoVideo.setVisibility(View.INVISIBLE);
             mExoPlayerView.setVisibility(View.VISIBLE);
 
@@ -288,6 +291,7 @@ public class RecipeInstructionFragment extends Fragment{
     }
 
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.btn_instruct_navback)
     public void btnNavBack_onClick(ImageButton btn){
         if (mExoPlayer != null)
@@ -297,6 +301,7 @@ public class RecipeInstructionFragment extends Fragment{
             mListener.onFragmentStepNav_Back();
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.btn_instruct_navforward)
     public void btnNavForward_onClick(ImageButton btn){
         if (mExoPlayer != null)

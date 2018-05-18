@@ -4,8 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.bf.bakingapp.R;
@@ -19,13 +17,15 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+@SuppressWarnings({"WeakerAccess", "ConstantConditions"})
 public class IngredientsActivity extends AppCompatActivity {
 
     private static final String TAG = IngredientsActivity.class.getSimpleName();
     public final static String KEY_RECIPE = "key_recipe";
 
     //private Recipe mRecipe;
-    ViewModelRecipe mViewModel;
+    @SuppressWarnings("FieldCanBeLocal")
+    private ViewModelRecipe mViewModel;
 
     @BindView(R.id.lv_ingredients)
     ListView mLvIngredients;
