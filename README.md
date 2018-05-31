@@ -4,7 +4,22 @@
 
 You will create an app, taking it from a functional state to a production-ready state. This will involve finding and handling error cases, adding accessibility features, allowing for localization, adding a widget, and adding a library.
 
-## Screenshots
+## Screenshots 
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/2644239/40795117-039c564e-64f9-11e8-85c0-8dedc8a0a24d.png?raw=true" alt="View 1"/>
+</p> 
+
+### Tablet support 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/2644239/40795123-06171c06-64f9-11e8-9d56-0ebe1fc9edab.png?raw=true" alt="View 2"/>
+</p> 
+
+### Widget 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/2644239/40795263-6598bf54-64f9-11e8-96b2-94818cf498ca.png?raw=true" alt="View 3"/> 
+</p>
+
 
 ## Why this Project?
 
