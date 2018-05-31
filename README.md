@@ -1,4 +1,4 @@
-# Popular Movies Project (Udacity Android Nanodegree)
+# Baking Recipes Project (Udacity Android Nanodegree)
 
 ## Project Overview
 
